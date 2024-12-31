@@ -1,13 +1,8 @@
 function [stop, reason] = stoppingcriterion(problem, x, options, info, last)
 % Checks for standard stopping criteria, as a helper to solvers.
-%
 % function [stop, reason] = stoppingcriterion(problem, x, options, info, last)
-%
-% Executes standard stopping criterion checks, based on what is defined in
-% the info(last) stats structure and in the options structure.
-%
-% The returned number 'stop' is 0 if none of the stopping criteria
-% triggered, and a (strictly) positive integer otherwise. The integer
+% Executes standard stopping criterion checks, based on what is defined in the info(last) stats structure and in the options structure.
+% The returned number 'stop' is 0 if none of the stopping criteria triggered, and a (strictly) positive integer otherwise. The integer
 % identifies which criterion triggered:
 %  0 : Nothing triggered;
 %  1 : Cost tolerance reached;
@@ -18,27 +13,14 @@ function [stop, reason] = stoppingcriterion(problem, x, options, info, last)
 %
 % The output 'reason' is a string describing the triggered event.
 
-% This file is part of Manopt: www.manopt.org.
-% Original author: Nicolas Boumal, Dec. 30, 2012.
-% Contributors: 
-% Change log: 
-%
+% This file is part of Manopt: www.manopt.org. Original author: Nicolas Boumal, Dec. 30, 2012. Contributors:  Change log: 
 %   Apr. 2, 2015 (NB):
 %       'reason' now contains the option (name and value) that triggered.
-%
 %   Aug. 3, 2018 (NB):
-%       Removed check for costevals, as it was never used, and the new
-%       manopt counters allow to do this in a more transparent way.
-%       Furthermore, now, options.stopfun can have 1 or 2 outputs: the
-%       first is a boolean indicating whether or not to stop, and the
+%       Removed check for costevals, as it was never used, and the new  manopt counters allow to do this in a more transparent way.
+%       Furthermore, now, options.stopfun can have 1 or 2 outputs: the  first is a boolean indicating whether or not to stop, and the
 %       (optional) second output is a string indicating the reason.
-
-
-    stop = 0;
-    reason = '';
-    
-    stats = info(last);
-
+    stop = 0;    reason = '';        stats = info(last);
     % Target cost attained
     if isfield(stats, 'cost') && isfield(options, 'tolcost') && ...
        stats.cost <= options.tolcost
@@ -46,7 +28,6 @@ function [stop, reason] = stoppingcriterion(problem, x, options, info, last)
         stop = 1;
         return;
     end
-
     % Target gradient norm attained
     if isfield(stats, 'gradnorm') && isfield(options, 'tolgradnorm') && ...
        stats.gradnorm < options.tolgradnorm
@@ -54,7 +35,6 @@ function [stop, reason] = stoppingcriterion(problem, x, options, info, last)
         stop = 2;
         return;
     end
-
     % Allotted time exceeded
     if isfield(stats, 'time') && isfield(options, 'maxtime') && ...
        stats.time >= options.maxtime
@@ -70,14 +50,11 @@ function [stop, reason] = stoppingcriterion(problem, x, options, info, last)
         stop = 4;
         return;
     end
-
     % Check whether the possibly user defined stopping criterion
     % triggers or not.
     if isfield(options, 'stopfun')
-        % options.stopfun can have 1 or 2 outputs, but checking this with
-        % nargout does not always work because it is technical to determine
-        % for anonymous functions. Thus, we use our best guess. Nargout
-        % returns -1 when it cannot determine the number of outputs, in
+        % options.stopfun can have 1 or 2 outputs, but checking this with  nargout does not always work because it is technical to determine
+        % for anonymous functions. Thus, we use our best guess. Nargout  returns -1 when it cannot determine the number of outputs, in
         % which case we take the safer approach of assuming 1 output.
         switch nargout(options.stopfun)
             case 2
@@ -87,8 +64,7 @@ function [stop, reason] = stoppingcriterion(problem, x, options, info, last)
                 reason = ['User defined stopfun criterion triggered; ' ...
                           'see options.stopfun.'];
             otherwise
-                error('manopt:stoppingcriterion:stopfunoutputs', ...
-                      'options.stopfun must have one or two outputs.');
+                error('manopt:stoppingcriterion:stopfunoutputs',  'options.stopfun must have one or two outputs.');
         end
         if userstop
             stop = 6;
@@ -101,5 +77,4 @@ function [stop, reason] = stoppingcriterion(problem, x, options, info, last)
             return;
         end
     end
-
 end

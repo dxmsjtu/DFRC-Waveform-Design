@@ -7,8 +7,6 @@ function  [X_trdoff] =  tradeoff_comrad_per_ant(rou,H,Y,power,X_arbi)
     A = A';
     B = [p1*sqrt(power)*Y;p2*X_arbi];
     B = B';
-
-
     % Create the problem structure.
     M = obliquecomplexfactory(L,N);
     problem.M = M;
@@ -21,7 +19,7 @@ function  [X_trdoff] =  tradeoff_comrad_per_ant(rou,H,Y,power,X_arbi)
     end
     problem.grad = @(X) problem.M.egrad2rgrad(X,egrad(X));
     function g = egrad(X)
-       g = 2*(X*A-B)*A';
+       g = 2*(X*A-B)*A';% （30） of [1]
     end
 %     figure;
 %     checkgradient(problem);   
